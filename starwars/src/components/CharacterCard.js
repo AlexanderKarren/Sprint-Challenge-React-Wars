@@ -9,7 +9,7 @@ const Card = styled.div`
 `
 
 const CardHeader = styled.div`
-    background-color:#00BFFF;
+    background-color:#4682B4;
     border-top-left-radius:6px;
     border-top-right-radius:6px;
     width:100%;

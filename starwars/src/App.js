@@ -3,6 +3,7 @@ import CharacterCard from "./components/CharacterCard";
 import './App.css';
 import axios from "axios";
 import styled from "styled-components";
+import SearchBar from './components/SearchBar';
 
 const TopContainer = styled.div`
   width:100%;
@@ -14,6 +15,7 @@ const TopContainer = styled.div`
 
 const App = () => {
   const [persons, setPersons] = useState([]);
+  const [searchValue, updateSearch] = useState("");
 
   useEffect(() => {
     axios.get("https://swapi.co/api/people/").then(response => {
@@ -27,7 +29,12 @@ const App = () => {
 
   return (
     <TopContainer className="App">
-      {persons.map(person => <CharacterCard person={person}/>)}
+      <SearchBar updateSearch={updateSearch}/>
+      {persons.map(person => {
+        if (person.name.includes(searchValue)) {
+          return <CharacterCard person={person}/>
+        }
+      })}
     </TopContainer>
   );
 }
