@@ -1,18 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import CharacterCard from "./components/CharacterCard";
+import SearchBar from './components/SearchBar';
+import Links from "./components/Links";
 import './App.css';
+import axios from "axios";
+import styled from "styled-components";
+
+const TopContainer = styled.div`
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+`
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
+  const [persons, setPersons] = useState([]);
+  const [searchValue, updateSearch] = useState("");
+  const [prevPage, updatePrevPage] = useState(null);
+  const [nextPage, updateNextPage] = useState(null);
+  const [currentPage, updateCurrentPage] = useState("https://swapi.co/api/people/");
 
-  // Fetch characters from the star wars api in an effect hook. Remember, anytime you have a 
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
+  const colors = ["#4682B4", "#8B0000", "#00BFFF", "#800080", "#FF4500", "#2F4F4F", "#228B22", "#DAA520", "#A52A2A", "#FF1493"];
+
+  const getCharacters = () => {
+    axios.get(currentPage).then(response => {
+      setPersons(response.data.results);
+      updatePrevPage(response.data.previous);
+      updateNextPage(response.data.next);
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
+
+  useEffect(getCharacters, []);
 
   return (
-    <div className="App">
-      <h1 className="Header">React Wars</h1>
-    </div>
+    <TopContainer className="App">
+      <SearchBar updateSearch={updateSearch}/>
+      <Links getCharacters={getCharacters} updateCurrentPage={updateCurrentPage} prevPage={prevPage} nextPage={nextPage}/>
+      {persons.map((person, index) => {
+        if (person.name.includes(searchValue)) {
+          return <CharacterCard person={person} color={colors[index]}/>
+        }
+      })}
+    </TopContainer>
   );
 }
 
