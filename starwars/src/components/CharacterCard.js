@@ -6,6 +6,7 @@ const Card = styled.div`
     border-radius:6px;
     width:400px;
     margin: 10px 0 10px 0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `
 
 const CardHeader = styled.div`
@@ -47,7 +48,7 @@ const Bold = styled.span`
 const CharacterCard = (props) => {
     return (
         <Card>
-            <CardHeader>
+            <CardHeader style={{backgroundColor: props.color}}>
                 <NameContainer>{props.person.name}</NameContainer>
             </CardHeader>
             <InformationContainer>
